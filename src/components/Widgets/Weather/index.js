@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Axios from 'axios';
-import ReactSVG from 'react-svg';
+import { ReactSVG } from 'react-svg';
 
 class Weather extends Component {
   state = { data: null };
@@ -14,18 +13,21 @@ class Weather extends Component {
   }
 
   getWeather = () => {
-    const { home = {}, widgets } = this.props.config;
-    const { longitude, latitude } = home;
-    const { weather } = widgets;
+    // Note: Dark Sky API was discontinued in 2023
+    // This component needs to be updated to use a different weather API
+    // such as OpenWeatherMap, WeatherAPI, or AccuWeather
+    console.warn('Weather component needs updating: Dark Sky API is discontinued');
 
-    if (longitude && latitude) {
-      const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
-      Axios.get(
-        `${PROXY_URL}https://api.darksky.net/forecast/${weather.dark_sky_secret}/${latitude},${longitude}?exclude=minutely,hourly&lang=en&units=auto`
-      ).then(({ data }) => {
-        this.setState({ data });
-      });
-    }
+    // Placeholder data for demonstration
+    const placeholderData = {
+      currently: {
+        icon: 'partly-cloudy-day',
+        summary: 'Weather API unavailable',
+        apparentTemperature: 20.5
+      }
+    };
+
+    this.setState({ data: placeholderData });
   };
 
   render() {

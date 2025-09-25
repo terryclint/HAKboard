@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Axios from 'axios';
-import moment from 'moment';
-import ReactSVG from 'react-svg';
+import { ReactSVG } from 'react-svg';
 
 class Todoist extends Component {
   state = { data: null };

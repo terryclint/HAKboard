@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Axios from 'axios';
-import moment from 'moment';
-import ReactSVG from 'react-svg';
+import dayjs from 'dayjs';
+import { ReactSVG } from 'react-svg';
 
 class Traffic extends Component {
   state = { data: null, extremes: null };
@@ -50,7 +50,7 @@ class Traffic extends Component {
 
   getNextTide = () => {
     const { extremes } = this.state;
-    const nextTide = extremes.find(extreme => moment(extreme.date).isAfter(moment()));
+    const nextTide = extremes.find(extreme => dayjs(extreme.date).isAfter(dayjs()));
     return nextTide;
   };
 
@@ -74,7 +74,7 @@ class Traffic extends Component {
         {extremes ? (
           <div className='d-flex flex-column m-3 align-items-start'>
             <h5>Tides</h5>
-            <h6>{`Next ${this.getNextTide().type.toLowerCase()} tide is at ${moment(this.getNextTide().date).format(
+            <h6>{`Next ${this.getNextTide().type.toLowerCase()} tide is at ${dayjs(this.getNextTide().date).format(
               'h:mm a'
             )}`}</h6>
             <div className='d-flex flex-row'>
@@ -84,7 +84,7 @@ class Traffic extends Component {
               />
               <h3 className='ml-3'>{this.getNextTide().type === 'High' ? 'Rising Tide' : 'Falling Tide'}</h3>
             </div>
-            <h6>{`Next ${extremes[extremes.indexOf(this.getNextTide()) + 1].type.toLowerCase()} tide is at ${moment(
+            <h6>{`Next ${extremes[extremes.indexOf(this.getNextTide()) + 1].type.toLowerCase()} tide is at ${dayjs(
               extremes[extremes.indexOf(this.getNextTide()) + 1].date
             ).format('h:mm a')}`}</h6>
             <h4 style={{ color: 'transparent' }}>test</h4>

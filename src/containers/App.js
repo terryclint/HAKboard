@@ -5,7 +5,6 @@ import ComponentContainer from '../components/Widgets/ComponentContaner';
 
 import BackgroundImage from '../components/BackgroundImage';
 
-import Axios from 'axios';
 import yaml from 'js-yaml';
 import { addConfig, setEditMode, setModal } from './actions';
 
@@ -92,7 +91,7 @@ class App extends Component {
   // };
 
   saveLayout = (layout) => {
-    const layoutYaml = yaml.safeDump(layout, { skipInvalid: true });
+    yaml.dump(layout, { skipInvalid: true });
   };
 
   render() {

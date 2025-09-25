@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { Calendar as BigCalendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
+import { Calendar as BigCalendar, dayjsLocalizer } from 'react-big-calendar';
+import dayjs from 'dayjs';
 import { connect } from 'react-redux';
 import Axios from 'axios';
-import ical from 'ical';
+import ICAL from 'ical.js';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-// Setup the localizer by providing the moment (or globalize) Object
+// Setup the localizer by providing the dayjs Object
 // to the correct localizer.
-const localizer = momentLocalizer(moment); // or globalizeLocalizer
+const localizer = dayjsLocalizer(dayjs);
 
 class Calendar extends Component {
   state = { events: [] };
@@ -26,30 +26,39 @@ class Calendar extends Component {
     const { url } = this.props.config;
     const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
     Axios.get(`${PROXY_URL}${url}`).then(({ data }) => {
-      const events = ical.parseICS(data);
-      const array = Object.keys(events).map(key => {
-        const event = events[key];
+      const jcalData = ICAL.parse(data);
+      const comp = new ICAL.Component(jcalData);
+      const vevents = comp.getAllSubcomponents('vevent');
+
+      const array = vevents.map(vevent => {
+        const event = new ICAL.Event(vevent);
         if (event.summary) {
+          const startTime = dayjs(event.startDate.toJSDate());
+          const endTime = dayjs(event.endDate.toJSDate());
           return {
-            title: this.isAllDay(event) ? event.summary : `${moment(event.start).format('HH:mm')} - ${event.summary}`,
-            start: moment(event.start),
-            end: moment(event.end),
-            allDay: this.isAllDay(event)
+            title: event.isAllDay ? event.summary : `${startTime.format('HH:mm')} - ${event.summary}`,
+            start: startTime.toDate(),
+            end: endTime.toDate(),
+            allDay: event.isAllDay
           };
         }
-      });
+        return null;
+      }).filter(Boolean);
+
       this.setState({
         events: array
       });
+    }).catch(error => {
+      console.error('Calendar fetch error:', error);
     });
   };
 
   isAllDay = event => {
-    const a = moment(event.start);
-    const b = moment(event.start).startOf('day');
+    const a = dayjs(event.start);
+    const b = dayjs(event.start).startOf('day');
 
-    const c = moment(event.end);
-    const d = moment(event.start)
+    const c = dayjs(event.end);
+    const d = dayjs(event.start)
       .add(1, 'days')
       .startOf('day');
 

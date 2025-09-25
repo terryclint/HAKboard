@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactSVG from 'react-svg';
+import { ReactSVG } from 'react-svg';
 
 class WeatherDay extends Component {
   render() {

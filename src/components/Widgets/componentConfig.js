@@ -27,4 +27,20 @@ export default [
     name: 'Weather',
     path: './Weather',
   },
+  {
+    name: 'Traffic',
+    path: './Traffic',
+  },
+  {
+    name: 'Calendar',
+    path: './Calendar',
+  },
+  {
+    name: 'Todoist',
+    path: './Todoist',
+  },
+  {
+    name: 'HomeAssistant',
+    path: './HomeAssistant',
+  },
 ];
